@@ -8,16 +8,16 @@ import com.tw.vapasi.exceptions.VehicleNotParkedException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ParkingLot {
+class ParkingLot {
     private final int capacity;
     private Set<String> vehicles;
 
-    public ParkingLot(int capacity) {
+    ParkingLot(int capacity) {
         this.capacity = capacity;
         vehicles = new HashSet<>();
     }
 
-    public void park(Vehicle vehicle) throws CustomException {
+    void park(Vehicle vehicle) throws CustomException {
         if (isSlotNotAvailable()) {
             throw new ParkingFullException("park:: Parking full");
         }
@@ -29,7 +29,7 @@ public class ParkingLot {
         vehicles.add(vehicle.getName());
     }
 
-    public void unPark(Vehicle vehicle) throws CustomException {
+    void unPark(Vehicle vehicle) throws CustomException {
         if (!isVehicleAlreadyParked(vehicle)) {
             throw new VehicleNotParkedException("park:: Vehicle not parked");
         }

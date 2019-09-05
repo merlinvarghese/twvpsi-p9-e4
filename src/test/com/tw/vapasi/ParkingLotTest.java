@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ParkingLotTest {
+@SuppressWarnings("ALL")
+class ParkingLotTest {
     @Nested
     class ParkingTests {
         @Test
