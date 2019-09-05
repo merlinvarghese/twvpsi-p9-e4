@@ -29,6 +29,12 @@ public class ParkingLot {
         vehicles.add(vehicle.getName());
     }
 
+    public void unPark(Vehicle vehicle) throws CustomException {
+        if (!isVehicleAlreadyParked(vehicle)) {
+            throw new VehicleNotParkedException("park:: Vehicle not parked");
+        }
+    }
+
     private boolean isVehicleAlreadyParked(Vehicle vehicle) {
         return vehicles.contains(vehicle.getName());
     }
