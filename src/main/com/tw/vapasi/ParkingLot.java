@@ -33,6 +33,8 @@ class ParkingLot {
         if (!isVehicleAlreadyParked(vehicle)) {
             throw new VehicleNotParkedException("park:: Vehicle not parked");
         }
+
+        vehicles.remove(vehicle.getName());
     }
 
     private boolean isVehicleAlreadyParked(Vehicle vehicle) {
