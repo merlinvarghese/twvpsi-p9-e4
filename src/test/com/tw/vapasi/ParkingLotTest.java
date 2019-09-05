@@ -14,12 +14,12 @@ public class ParkingLotTest {
         @Test
         void expectVehicleParkedWhenSlotAvailable() {
             ParkingLot parkingLot = new ParkingLot(4);
-            assertThrows(ParkingFullException.class, () -> parkingLot.park(new Vehicle("i10")));
+            assertDoesNotThrow(() -> parkingLot.park(new Vehicle("i10")));
         }
 
         @Test
         void expectParkFailsWhenVehicleAlreadyParked() throws CustomException {
-            ParkingLot parkingLot = new ParkingLot(0);
+            ParkingLot parkingLot = new ParkingLot(3);
             parkingLot.park(new Vehicle("i10"));
             assertThrows(VehicleAlreadyParkedException.class, () -> parkingLot.park(new Vehicle("i10")));
         }
