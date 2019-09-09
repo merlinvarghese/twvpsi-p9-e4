@@ -17,7 +17,7 @@ class ParkingLot {
         vehicles = new HashSet<>();
     }
 
-    void park(Vehicle vehicle) throws CustomException {
+    void park(Parkable vehicle) throws CustomException {
         if (isSlotNotAvailable()) {
             throw new ParkingFullException("park:: Parking full");
         }
@@ -26,19 +26,23 @@ class ParkingLot {
             throw new VehicleAlreadyParkedException("park:: Vehicle already parked");
         }
 
-        vehicles.add(vehicle.getName());
+        vehicles.add(vehicle.getRegistrationNumber());
     }
 
-    void unPark(Vehicle vehicle) throws CustomException {
+    void unpark(Parkable vehicle) throws CustomException {
         if (!isVehicleAlreadyParked(vehicle)) {
             throw new VehicleNotParkedException("park:: Vehicle not parked");
         }
 
-        vehicles.remove(vehicle.getName());
+        vehicles.remove(vehicle.getRegistrationNumber());
     }
 
-    private boolean isVehicleAlreadyParked(Vehicle vehicle) {
-        return vehicles.contains(vehicle.getName());
+    boolean isParked(Parkable vehicle) {
+        return isVehicleAlreadyParked(vehicle);
+    }
+
+    private boolean isVehicleAlreadyParked(Parkable vehicle) {
+        return vehicles.contains(vehicle.getRegistrationNumber());
     }
 
     private boolean isSlotNotAvailable() {

@@ -7,7 +7,7 @@ public class Vehicle implements Parkable {
         this.registrationNumber = name;
     }
 
-    public String getName() {
+    public String getRegistrationNumber() {
         return registrationNumber;
     }
 }
