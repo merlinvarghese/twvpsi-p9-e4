@@ -11,9 +11,17 @@ import java.util.Set;
 class ParkingLot {
     private final int capacity;
     private Set<String> vehicles;
+    private ParkingLotOwner parkingLotOwner;
 
-    ParkingLot(int capacity) {
+    ParkingLot(int capacity, ParkingLotOwner parkingLotOwner) {
         this.capacity = capacity;
+        this.parkingLotOwner = parkingLotOwner;
+        vehicles = new HashSet<>();
+    }
+
+    public ParkingLot(int capacity) {
+        this.capacity = capacity;
+        this.parkingLotOwner = null;
         vehicles = new HashSet<>();
     }
 
@@ -27,6 +35,9 @@ class ParkingLot {
         }
 
         vehicles.add(vehicle.getRegistrationNumber());
+        if (isSlotNotAvailable() && parkingLotOwner != null) {
+            parkingLotOwner.notifyParkingFull();
+        }
     }
 
     void unpark(Parkable vehicle) throws CustomException {

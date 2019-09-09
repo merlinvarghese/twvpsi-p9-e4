@@ -1,9 +1,6 @@
 package com.tw.vapasi;
 
-import com.tw.vapasi.exceptions.CustomException;
-import com.tw.vapasi.exceptions.ParkingFullException;
-import com.tw.vapasi.exceptions.VehicleAlreadyParkedException;
-import com.tw.vapasi.exceptions.VehicleNotParkedException;
+import com.tw.vapasi.exceptions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -77,6 +74,7 @@ class ParkingLotTest {
 
     @Nested
     class MockObjectsTests {
+
         @Nested
         class ParkTests {
             @Test
@@ -144,6 +142,67 @@ class ParkingLotTest {
             void expectFalseWhenVehicleParkedUnSuccessfully() throws CustomException {
                 assertFalse(parkingLot.isParked(parkable));
             }
+        }
+    }
+
+    @Nested
+    class ParkingLotOwnerNotificationTests {
+        ParkingLot parkingLot;
+        Parkable parkable;
+
+        @BeforeEach
+        void setUp() {
+            ParkingLotOwnerFourWheeler parkingLotOwnerFourWheeler = new ParkingLotOwnerFourWheeler();
+            parkingLot = new ParkingLot(4, parkingLotOwnerFourWheeler);
+            parkable = mock(Parkable.class);
+            when(parkable.getRegistrationNumber()).thenReturn("KA87KI1234");
+        }
+
+        @Test
+        void expectOwnerGetsNotifiedWhenParkingFull() throws CustomException {
+            ParkingLotOwnerFourWheeler parkingLotOwnerFourWheeler = new ParkingLotOwnerFourWheeler();
+            parkingLot = new ParkingLot(1, parkingLotOwnerFourWheeler);
+            parkingLot.park(parkable);
+
+            assertTrue(parkingLotOwnerFourWheeler.isParkingFull());
+        }
+
+        @Test
+        void expectOwnerGetsNoNotificationWhenParkingNotFull() throws CustomException {
+            ParkingLotOwnerFourWheeler parkingLotOwnerFourWheeler = new ParkingLotOwnerFourWheeler();
+            parkingLot = new ParkingLot(2, parkingLotOwnerFourWheeler);
+            parkingLot.park(parkable);
+
+            assertThrows(ParkingFullNotificationNotReceivedException.class, () -> parkingLotOwnerFourWheeler.isParkingFull());
+        }
+    }
+
+    @Nested
+    class ParkingLotOwnerNotificationTestsUsingMock {
+        ParkingLot parkingLot;
+        Parkable parkable;
+        ParkingLotOwner parkingLotOwner;
+
+        @BeforeEach
+        void setUp() {
+            parkingLotOwner = mock(ParkingLotOwner.class);
+            parkingLot = new ParkingLot(4, parkingLotOwner);
+            parkable = mock(Parkable.class);
+            when(parkable.getRegistrationNumber()).thenReturn("KA87KI1234");
+        }
+
+        @Test
+        void expectOwnerGetsNotifiedWhenParkingFull() throws CustomException {
+            parkingLot = new ParkingLot(1, parkingLotOwner);
+            parkingLot.park(parkable);
+            verify(parkingLotOwner, times(1)).notifyParkingFull();
+        }
+
+        @Test
+        void expectOwnerGetsNoNotificationWhenParkingNotFull() throws CustomException {
+            parkingLot = new ParkingLot(2, parkingLotOwner);
+            parkingLot.park(parkable);
+            verify(parkingLotOwner, never()).notifyParkingFull();
         }
     }
 }
