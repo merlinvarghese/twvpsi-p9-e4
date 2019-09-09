@@ -4,12 +4,12 @@ import com.tw.vapasi.exceptions.CustomException;
 import com.tw.vapasi.exceptions.ParkingFullException;
 import com.tw.vapasi.exceptions.VehicleAlreadyParkedException;
 import com.tw.vapasi.exceptions.VehicleNotParkedException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings("ALL")
 class ParkingLotTest {
@@ -123,14 +123,26 @@ class ParkingLotTest {
 
         @Nested
         class ParkedStatusTests {
+            ParkingLot parkingLot;
+            Parkable parkable;
+
+            @BeforeEach
+            void setUp() {
+                parkingLot = new ParkingLot(4);
+                parkable = mock(Parkable.class);
+                when(parkable.getRegistrationNumber()).thenReturn("KA87KI1234");
+            }
+
             @Test
             void expectTrueWhenVehicleParkedSuccessfully() throws CustomException {
-                ParkingLot parkingLot = new ParkingLot(4);
-                Parkable cari10 = mock(Parkable.class);
-                when(cari10.getRegistrationNumber()).thenReturn("KA87KI1234");
-                parkingLot.park(cari10);
+                parkingLot.park(parkable);
 
-                assertTrue(parkingLot.isParked(cari10));
+                assertTrue(parkingLot.isParked(parkable));
+            }
+
+            @Test
+            void expectFalseWhenVehicleParkedUnSuccessfully() throws CustomException {
+                assertFalse(parkingLot.isParked(parkable));
             }
         }
     }
