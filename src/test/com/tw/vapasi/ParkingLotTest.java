@@ -220,5 +220,6 @@ class ParkingLotTest {
             parkingLot.unpark(parkable);
             verify(parkingLotOwner, never()).notifyParkingAvailable();
         }
+
     }
 }
