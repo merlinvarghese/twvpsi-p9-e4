@@ -2,7 +2,7 @@ package com.tw.vapasi;
 
 import com.tw.vapasi.exceptions.ParkingFullNotificationNotReceivedException;
 
-public class ParkingLotOwnerFourWheeler implements ParkingLotOwner {
+public class ParkingLotObserverFourWheeler implements ParkingLotObserver {
     private boolean parkingFull;
 
     boolean isParkingFull() throws ParkingFullNotificationNotReceivedException {
@@ -17,8 +17,14 @@ public class ParkingLotOwnerFourWheeler implements ParkingLotOwner {
         this.parkingFull = true;
     }
 
+
     @Override
-    public void notifyParkingAvailable() {
+    public void notifyParkingFull(ParkingLot parkingLot) {
+
+    }
+
+    @Override
+    public void notifyParkingAvailable(ParkingLot parkingLot) {
 
     }
 }

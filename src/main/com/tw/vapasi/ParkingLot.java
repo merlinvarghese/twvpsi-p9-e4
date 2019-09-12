@@ -5,24 +5,33 @@ import com.tw.vapasi.exceptions.ParkingFullException;
 import com.tw.vapasi.exceptions.VehicleAlreadyParkedException;
 import com.tw.vapasi.exceptions.VehicleNotParkedException;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 class ParkingLot {
     private final int capacity;
     private Set<String> vehicles;
-    private ParkingLotOwner parkingLotOwner;
+    private List<ParkingLotObserver> observers = new ArrayList<>();
 
-    ParkingLot(int capacity, ParkingLotOwner parkingLotOwner) {
+    ParkingLot(int capacity, ParkingLotObserver parkingLotObserver) {
         this.capacity = capacity;
-        this.parkingLotOwner = parkingLotOwner;
         vehicles = new HashSet<>();
     }
 
-    public ParkingLot(int capacity) {
+    ParkingLot(int capacity) {
         this.capacity = capacity;
-        this.parkingLotOwner = null;
         vehicles = new HashSet<>();
+    }
+
+    ParkingLot(int capacity, Valet valet) {
+        this.capacity = capacity;
+        vehicles = new HashSet<>();
+    }
+
+    void registerForNotifications(ParkingLotObserver observer) {
+        observers.add(observer);
     }
 
     void park(Parkable vehicle) throws CustomException {
@@ -35,9 +44,8 @@ class ParkingLot {
         }
 
         vehicles.add(vehicle.getRegistrationNumber());
-        if (isSlotNotAvailable() && isOwnerPresent()) {
-            parkingLotOwner.notifyParkingFull();
-        }
+
+        sendParkingFullNotification();
     }
 
     void unpark(Parkable vehicle) throws CustomException {
@@ -47,21 +55,31 @@ class ParkingLot {
 
         vehicles.remove(vehicle.getRegistrationNumber());
 
-        if (isOwnerPresent() && isThisFirstSlotAvaialbleAfterParkingWasFull()) {
-            parkingLotOwner.notifyParkingAvailable();
-        }
-    }
-
-    private boolean isThisFirstSlotAvaialbleAfterParkingWasFull() {
-        return vehicles.size() == capacity - 1;
-    }
-
-    private boolean isOwnerPresent() {
-        return parkingLotOwner != null;
+        sendParkingAvailableNotification();
     }
 
     boolean isParked(Parkable vehicle) {
         return isVehicleAlreadyParked(vehicle);
+    }
+
+    private void sendParkingFullNotification() {
+        if (isSlotNotAvailable()) {
+            for (ParkingLotObserver observer : observers) {
+                observer.notifyParkingFull(this);
+            }
+        }
+    }
+
+    private void sendParkingAvailableNotification() {
+        if (isParkingAvailableAgain()) {
+            for (ParkingLotObserver observer : observers) {
+                observer.notifyParkingAvailable(this);
+            }
+        }
+    }
+
+    private boolean isParkingAvailableAgain() {
+        return vehicles.size() == capacity - 1;
     }
 
     private boolean isVehicleAlreadyParked(Parkable vehicle) {
