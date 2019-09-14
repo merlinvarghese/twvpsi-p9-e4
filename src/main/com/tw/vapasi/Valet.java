@@ -39,4 +39,13 @@ class Valet implements ParkingLotObserver {
     public void notifyParkingAvailable(ParkingLot parkingLot) {
         availableParkingLots.add(parkingLot);
     }
+
+    public boolean isParked(Parkable cari10) {
+        ParkingLot parkingLot = parkingLotsMapping.get(cari10.getRegistrationNumber());
+        if (parkingLot == null) {
+            return false;
+        }
+
+        return parkingLot.isParked(cari10);
+    }
 }
