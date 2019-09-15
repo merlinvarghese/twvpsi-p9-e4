@@ -153,7 +153,7 @@ class ParkingLotTest {
         @BeforeEach
         void setUp() {
             ParkingLotObserverFourWheeler parkingLotOwnerFourWheeler = new ParkingLotObserverFourWheeler();
-            parkingLot = new ParkingLot(4, parkingLotOwnerFourWheeler);
+            parkingLot = new ParkingLot(4);
             parkable = mock(Parkable.class);
             when(parkable.getRegistrationNumber()).thenReturn("KA87KI1234");
         }
@@ -161,7 +161,7 @@ class ParkingLotTest {
         @Test
         void expectOwnerGetsNotifiedWhenParkingFull() throws CustomException {
             ParkingLotObserverFourWheeler parkingLotOwnerFourWheeler = new ParkingLotObserverFourWheeler();
-            parkingLot = new ParkingLot(1, parkingLotOwnerFourWheeler);
+            parkingLot = new ParkingLot(1);
             parkingLot.park(parkable);
 
             assertTrue(parkingLotOwnerFourWheeler.isParkingFull());
@@ -170,7 +170,7 @@ class ParkingLotTest {
         @Test
         void expectOwnerGetsNoNotificationWhenParkingNotFull() throws CustomException {
             ParkingLotObserverFourWheeler parkingLotOwnerFourWheeler = new ParkingLotObserverFourWheeler();
-            parkingLot = new ParkingLot(2, parkingLotOwnerFourWheeler);
+            parkingLot = new ParkingLot(2);
             parkingLot.park(parkable);
 
             assertThrows(ParkingFullNotificationNotReceivedException.class, () -> parkingLotOwnerFourWheeler.isParkingFull());
@@ -186,28 +186,28 @@ class ParkingLotTest {
         @BeforeEach
         void setUp() {
             parkingLotObserver = mock(ParkingLotObserver.class);
-            parkingLot = new ParkingLot(4, parkingLotObserver);
+            parkingLot = new ParkingLot(4);
             parkable = mock(Parkable.class);
             when(parkable.getRegistrationNumber()).thenReturn("KA87KI1234");
         }
 
         @Test
         void expectOwnerGetsNotifiedWhenParkingFull() throws CustomException {
-            parkingLot = new ParkingLot(1, parkingLotObserver);
+            parkingLot = new ParkingLot(1);
             parkingLot.park(parkable);
             //verify(parkingLotObserver, times(1)).notifyParkingFull(parkingLotObserver);
         }
 
         @Test
         void expectOwnerGetsNoNotificationWhenParkingNotFull() throws CustomException {
-            parkingLot = new ParkingLot(2, parkingLotObserver);
+            parkingLot = new ParkingLot(2);
             parkingLot.park(parkable);
             verify(parkingLotObserver, never()).notifyParkingFull(parkingLot);
         }
 
         @Test
         void expectOwnerGetsNotifiedWhenParkingAvailable() throws CustomException {
-            parkingLot = new ParkingLot(1, parkingLotObserver);
+            parkingLot = new ParkingLot(1);
             parkingLot.park(parkable);
             parkingLot.unpark(parkable);
             verify(parkingLotObserver).notifyParkingAvailable(parkingLot);
@@ -215,7 +215,7 @@ class ParkingLotTest {
 
         @Test
         void expectOwnerNotNotifiedAboutParkingAvailableIfSlotsAvailableAreMoreThanOne() throws CustomException {
-            parkingLot = new ParkingLot(3, parkingLotObserver);
+            parkingLot = new ParkingLot(3);
             parkingLot.park(parkable);
             parkingLot.unpark(parkable);
             verify(parkingLotObserver, never()).notifyParkingAvailable(parkingLot);

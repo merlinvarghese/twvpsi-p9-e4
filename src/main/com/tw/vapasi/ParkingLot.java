@@ -15,17 +15,7 @@ class ParkingLot {
     private Set<String> vehicles;
     private List<ParkingLotObserver> observers = new ArrayList<>();
 
-    ParkingLot(int capacity, ParkingLotObserver parkingLotObserver) {
-        this.capacity = capacity;
-        vehicles = new HashSet<>();
-    }
-
     ParkingLot(int capacity) {
-        this.capacity = capacity;
-        vehicles = new HashSet<>();
-    }
-
-    ParkingLot(int capacity, Valet valet) {
         this.capacity = capacity;
         vehicles = new HashSet<>();
     }
